@@ -1,0 +1,59 @@
+frontend/node_modules
+
+
+# Next.js build output
+frontend/.next/
+frontend/out/
+
+# Environment variables
+frontend/.env.local
+
+
+# Log files
+frontend/npm-debug.log*
+
+# OS-specific files
+frontend/.DS_Store
+frontend/Thumbs.db
+
+# IDE-specific files
+.vscode/
+
+# Build directories
+backend/HELP.md
+backend/target/
+!backend/.mvn/wrapper/maven-wrapper.jar
+!**/backend/src/main/**/target/
+!**/backend/src/test/**/target/
+
+### STS ###
+backend/.apt_generated
+backend/.classpath
+backend/.factorypath
+backend/.project
+backend/.settings
+backend/.springBeans
+backend/.sts4-cache
+
+### IntelliJ IDEA ###
+backend/.idea
+backend/*.iws
+backend/*.iml
+backend/*.ipr
+
+### NetBeans ###
+backend/nbproject/private/
+backend/nbbuild/
+backend/dist/
+backend/nbdist/
+backend/.nb-gradle/
+backend/build/
+!**/backend/src/main/**/build/
+!**/backend/src/test/**/build/
+
+### VS Code ###
+backend/.vscode/
+
+### next ###
+backend/.next
+backend/node_modules
