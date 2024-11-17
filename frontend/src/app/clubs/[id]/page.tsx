@@ -6,7 +6,7 @@ import { useParams } from "next/navigation";
 export default function Home() {
   const { id } = useParams();
   return (
-    <div className="">
+    <div className="content-container">
       <p>Hi from {id}!</p>
       <p>FINITE LOOP CLUB</p>
       <p>

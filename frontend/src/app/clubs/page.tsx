@@ -12,7 +12,6 @@ import {
   CommandList,
   CommandShortcut,
 } from "@/components/ui/command";
-import { useRouter } from "next/router";
 
 interface Club {
   shortcut: any;
