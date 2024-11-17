@@ -16,7 +16,8 @@ import java.util.Date;
 public class Notification {
     @Id
     private ObjectId id;
-    private String userId; // User to whom the notification is sent
+    private Integer notificationId;
+    private Integer userId; // User to whom the notification is sent
     private String message;
     private Date sentAt;
     private boolean read; // Indicates whether the user has read the notification

@@ -16,7 +16,8 @@ import java.util.Date;
 public class Event {
     @Id
     private ObjectId id;
-    private String clubId;
+    private Integer eventId;
+    private Integer clubId;
     private String eventName;
     private String description;
     private String banner;

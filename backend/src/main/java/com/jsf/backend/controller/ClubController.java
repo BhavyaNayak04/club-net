@@ -31,4 +31,9 @@ public class ClubController {
     public ResponseEntity<Club> getClubById(@PathVariable Integer clubId){
         return new ResponseEntity<>(clubService.clubById(clubId), HttpStatus.OK);
     }
+
+    @GetMapping("/{userId}/followed-clubs")
+    public ResponseEntity<List<Club>> getAllClubsByUserId(@PathVariable Integer userId){
+        return new ResponseEntity<>(clubService.allClubsByUserId(userId), HttpStatus.OK);
+    }
 }

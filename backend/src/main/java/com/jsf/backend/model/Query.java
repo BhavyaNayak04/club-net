@@ -16,7 +16,7 @@ import java.util.Date;
 public class Query {
     @Id
     private ObjectId id;
-    private String eventId;
+    private Integer eventId;
     private String userId;
     private String queryText;
     private Date raisedAt;

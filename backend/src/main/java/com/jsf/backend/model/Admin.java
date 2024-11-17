@@ -14,6 +14,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class Admin {
     @Id
     private ObjectId id;
+    private Integer adminId;
     private String name;
     private String clubId;
 }

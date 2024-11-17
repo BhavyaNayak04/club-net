@@ -57,3 +57,6 @@ backend/.vscode/
 ### next ###
 backend/.next
 backend/node_modules
+
+### env files! ###
+backend/src/main/resources/.env

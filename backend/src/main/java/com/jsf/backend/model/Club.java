@@ -22,5 +22,5 @@ public class Club {
     private String description;
     private String url;
     private String logo; // Path to logo image
-    private List<String> followers;
+    private List<Integer> followers;
 }
