@@ -6,7 +6,7 @@ export default function Navbar() {
   const [mode, setMode] = useState("🌞");
   return (
     <nav
-      className={`flex flex-row justify-between items-center bg-inherit px-28 py-5 sticky top-0 z-100`}
+      className={`flex flex-row justify-between items-center bg-inherit px-28 py-5 sticky top-0 z-50`}
     >
       <Link href="/" className="text-xl">
         ClubNet
