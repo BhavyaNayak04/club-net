@@ -3,12 +3,12 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { useParams } from "next/navigation";
 
-export default function Home() {
+export default function ClubDetails() {
   const { id } = useParams();
   return (
     <div className="content-container">
-      <p>Hi from {id}!</p>
-      <p>FINITE LOOP CLUB</p>
+      <p></p>
+      <p></p>
       <p>
         <a href="https://finiteloop.co.in" className="underline">
           Visit their website

@@ -15,35 +15,26 @@ import {
 
 interface Club {
   shortcut: any;
-  id: string;
-  name: string;
+  clubId: string;
+  clubName: string;
   description: string;
-  image: string;
-  members: { length: number };
+  category: string;
+  logo: string;
+  followers: { length: number };
+  url: string;
 }
 
-const Page = () => {
+export default function Club() {
   const [clubs, setClubs] = useState<Club[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery, _] = useState("");
 
   useEffect(() => {
     const fetchClubs = async () => {
       setLoading(true);
 
-      const username: string = "bhavya123"; // Replace with your actual username
-      const password: string = "0"; // Replace with your actual password
-      const credentials: string = btoa(`${username}:${password}`); // Encode credentials in Base64
-
       try {
-        const response = await fetch("http://localhost:8080/api/clubs", {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Basic ${credentials}`, // Set the Authorization header
-          },
-          credentials: "include", // Include credentials if necessary
-        });
+        const response = await fetch("http://localhost:8080/api/clubs");
 
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
@@ -63,7 +54,7 @@ const Page = () => {
   }, []);
 
   const filteredClubs = clubs.filter((club) =>
-    club.name.toLowerCase().includes(searchQuery.toLowerCase())
+    club.clubName.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   return (
@@ -74,15 +65,15 @@ const Page = () => {
           <CommandEmpty>No results found.</CommandEmpty>
           <CommandGroup heading="Clubs">
             {filteredClubs.map((club, index) => (
-              <Link href={`/clubs/${club.id}`} key={club.id}>
+              <Link href={`/clubs/${club.clubId}`} key={club.clubId}>
                 <CommandItem key={index}>
                   <Image
-                    src={club.image}
-                    alt={club.name}
+                    src={club.logo}
+                    alt={club.clubName}
                     width={20}
                     height={20}
                   />
-                  <span>{club.name}</span>
+                  <span>{club.clubName}</span>
                   {club.shortcut && (
                     <CommandShortcut>{club.shortcut}</CommandShortcut>
                   )}
@@ -99,20 +90,22 @@ const Page = () => {
           <div className="mx-auto grid grid-cols-3 gap-10">
             {clubs.map((club) => (
               <Link
-                href={`/clubs/${club.id}`}
-                key={club.id}
+                href={`/clubs/${club.clubId}`}
+                key={club.clubId}
                 className="text-justify flex items-center flex-col justify-center space-y-5"
               >
                 <Image
-                  src={club.image}
-                  alt={club.name}
+                  src={club.logo}
+                  alt={club.clubName}
                   width={200}
                   height={200}
                 />
                 <div>
-                  <h3 className="text-xl">{club.name}</h3>
+                  <h3 className="text-xl">{club.clubName}</h3>
+                  <p>{club.category}</p>
                   <p>{club.description}</p>
-                  <p>{club.members.length} followers</p>
+                  <p>{club.followers.length} followers</p>
+                  <a href={`${club.url}`}>Visit Website</a>
                 </div>
               </Link>
             ))}
@@ -121,6 +114,4 @@ const Page = () => {
       </main>
     </section>
   );
-};
-
-export default Page;
+}
