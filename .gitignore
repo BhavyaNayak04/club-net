@@ -60,3 +60,8 @@ backend/node_modules
 
 ### env files! ###
 backend/src/main/resources/.env
+
+### bun files ###
+frontend/bun.lockb
+bun.lockb
+.bun/
