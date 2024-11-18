@@ -107,8 +107,34 @@ export default function DashboardPage() {
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
+    // Create a FormData object to handle file uploads
+    const formData = new FormData();
+
+    // Append all form values
+    formData.append("ename", values.ename);
+    formData.append("description", values.description);
+    formData.append("banner", values.banner); // Assuming the file input is an array
+    formData.append("club", values.club);
+    formData.append("entryFee", values.entryFee.toString()); // Convert to string for FormData
+    formData.append("teamMates", values.teamMates.toString()); // Convert to string for FormData
+    formData.append("location", values.location);
+    formData.append("contact", values.contact);
+    formData.append("dateTime", values.dateTime);
+
+    // Send the form data to the API
+    fetch('/api/events/add', {
+      method: 'POST',
+      body: formData, // Using FormData directly
+    })
+    .then((response) => response.json())
+    .then((data) => {
+      console.log("Event added:", data);
+    })
+    .catch((error) => {
+      console.error("Error adding event:", error);
+    });
   }
+
   return (
     <section className="content-container space-y-10">
       <h1 className="text-3xl font-bold">Dashboard</h1>
