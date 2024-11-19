@@ -26,20 +26,4 @@ public class Event {
     private Integer entryFee;
     private Integer teamCapacity;
     private String organizerContactNumber;
-
-    public Event( Integer clubId, String eventName, String description,
-                 String banner, Date dateAndTime, String location, Integer entryFee,
-                 Integer teamCapacity, String organizerContactNumber) {
-        this.clubId = clubId;
-        this.eventName = eventName;
-        this.description = description;
-        this.banner = banner;
-        this.dateAndTime = dateAndTime;
-        this.location = location;
-        this.entryFee = entryFee;
-        this.teamCapacity = teamCapacity;
-        this.organizerContactNumber = organizerContactNumber;
-    }
-
-
 }

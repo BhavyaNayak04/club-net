@@ -90,22 +90,22 @@ export default function Club() {
           <div className="mx-auto grid grid-cols-3 gap-10">
             {clubs.map((club) => (
               <Link
-                href={`/clubs/${club.clubId}`}
+                href={`/clubs/${club.clubId}?`}
                 key={club.clubId}
-                className="text-justify flex items-center flex-col justify-center space-y-5"
+                className="text-pretty text-sm flex items-center flex-col justify-center space-y-5"
               >
                 <Image
                   src={club.logo}
                   alt={club.clubName}
                   width={200}
                   height={200}
+                  className="object-cover h-48 w-48"
                 />
-                <div>
+                <div className="space-y-2">
                   <h3 className="text-xl">{club.clubName}</h3>
                   <p>{club.category}</p>
                   <p>{club.description}</p>
                   <p>{club.followers.length} followers</p>
-                  <a href={`${club.url}`}>Visit Website</a>
                 </div>
               </Link>
             ))}

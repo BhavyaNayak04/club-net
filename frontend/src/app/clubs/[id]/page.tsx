@@ -1,45 +1,131 @@
 "use client";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import { useParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
+import Link from "next/link";
 
+interface Club {
+  clubName: string;
+  clubId: number;
+  category: string;
+  description: string;
+  url: string;
+  logo: string;
+  followers: number[];
+}
+interface Event {
+  eventId: number;
+  clubId: number;
+  eventName: string;
+  description: string;
+  banner: string;
+  dateAndTime: string;
+  location: string;
+  entryFee: number;
+  teamCapacity: number;
+  organizerContactNumber: string;
+}
 export default function ClubDetails() {
   const { id } = useParams();
+
+  const [club, setClub] = useState<Club | null>(null);
+  const [events, setEvents] = useState<Event[]>([]);
+  const [loadingEvents, setLoadingEvents] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(true);
+
+  useEffect(() => {
+    const fetchClubDetails = async () => {
+      setLoading(true);
+      setLoadingEvents(true);
+
+      try {
+        const response = await fetch(`http://localhost:8080/api/clubs/${id}`);
+        const response2 = await fetch(
+          `http://localhost:8080/api/events/club/${id}`
+        );
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const data: Club = await response.json();
+        const data2: Event[] = await response2.json();
+        setEvents(data2);
+        setClub(data);
+      } catch (error) {
+        console.error("Error fetching club details:", error);
+      } finally {
+        setLoading(false);
+        setLoadingEvents(false);
+      }
+    };
+
+    if (id) {
+      fetchClubDetails();
+    }
+  }, [id]);
+
+  if (loading) {
+    return <p>Loading...</p>;
+  }
+
+  if (!club) {
+    return <p>Club details not found.</p>;
+  }
+
   return (
     <div className="content-container">
-      <p></p>
-      <p></p>
-      <p>
-        <a href="https://finiteloop.co.in" className="underline">
-          Visit their website
-        </a>
-      </p>
-      <main className="flex flex-col justify-center items-center space-y-10 text-justify">
-        <div className="flex justify-between items-center gap-4">
+      <main className="flex flex-col justify-center items-center space-y-10 text-justify ">
+        <div className="flex flex-col items-center space-y-5 ">
           <Image
-            src="https://images.squarespace-cdn.com/content/v1/5e10bdc20efb8f0d169f85f9/09943d85-b8c7-4d64-af31-1a27d1b76698/arrow.png?format=1500w"
-            alt="Vercel Logo"
-            width={500}
-            height={500}
+            src={club.logo || "/placeholder-logo.png"}
+            alt={club.clubName}
+            width={200}
+            height={200}
+            className="w-48 h-48 object-contain"
           />
+          <h1 className="text-3xl font-bold">{club.clubName}</h1>
+          <div className="flex gap-2">
+            <p className="italic">{club.category}</p>
+            {"|"}
+            <h3 className="italic">{club.followers.length} followers</h3>
+          </div>
+          <p>{club.description}</p>
           <p>
-            What is Lorem Ipsum? Lorem Ipsum is simply dummy text of the
-            printing and typesetting industry. Lorem Ipsum has been the
-            industry's standard dummy text ever since the 1500s, when an unknown
-            printer took a galley of type and scrambled it to make a type
-            specimen book. It has survived not only five centuries, but also the
-            leap into electronic typesetting, remaining essentially unchanged.
-            It was popularised in the 1960s with the release of Letraset sheets
-            containing Lorem Ipsum passages, and more recently with desktop
-            publishing software like Aldus PageMaker including versions of Lorem
-            Ipsum. Why do we use it? and a search for 'lorem ipsum' will uncover
-            many web sites still in their infancy. Various versions have evolved
-            over the years, sometimes by accident, sometimes on purpose
-            (injected humour and the like).
+            <Link href={club.url} target="_blank" rel="noopener noreferrer">
+              Visit their website
+            </Link>
           </p>
         </div>
-        <Button>Join Club</Button>
-        <h3 className="text-3xl">Upcoming Events</h3>
+        <Button>Follow</Button>
+
+        <h3 className="text-2xl">Events</h3>
+        {loadingEvents ? (
+          <p>Loading events...</p>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 content-container ">
+            {events.map((event) => (
+              <div
+                key={event.eventId}
+                className="p-5 text-sm border rounded shadow space-y-5"
+              >
+                <h3 className="text-xl text-center">{event.eventName}</h3>
+                <Image
+                  src={event.banner}
+                  height={200}
+                  width={200}
+                  alt={event.eventName}
+                  className="w-full h-48 object-cover"
+                />
+                <p className="text-center">
+                  <Button size={"sm"}>
+                    <Link href={`/events/${event.eventId}`}>View Event</Link>
+                  </Button>
+                </p>
+              </div>
+            ))}
+          </div>
+        )}
       </main>
     </div>
   );

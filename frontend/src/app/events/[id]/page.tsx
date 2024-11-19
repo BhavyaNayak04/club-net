@@ -1,49 +1,99 @@
 "use client";
+import Link from "next/link";
 import Image from "next/image";
 import { useParams } from "next/navigation";
+import { useEffect, useState } from "react";
+import { Button } from "@/components/ui/button";
+
+interface Event {
+  eventId: number;
+  clubId: number;
+  eventName: string;
+  description: string;
+  banner: string;
+  dateAndTime: string;
+  location: string;
+  entryFee: number;
+  teamCapacity: number;
+  organizerContactNumber: string;
+}
 
 export default function Home() {
   const { id } = useParams();
+  const [event, setEvent] = useState<Event | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+
+  useEffect(() => {
+    const fetchEventDetails = async () => {
+      setLoading(true);
+
+      try {
+        const response = await fetch(`http://localhost:8080/api/events/${id}`);
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const data: Event = await response.json();
+        setEvent(data);
+      } catch (error) {
+        console.error("Error fetching event details:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (id) {
+      fetchEventDetails();
+    }
+  }, [id]);
+
+  if (loading) {
+    return <p>Loading event details...</p>;
+  }
+
+  if (!event) {
+    return <p>Event details not found.</p>;
+  }
+
   return (
-    <div className="">
-      <p>Hi from {id}!</p>
-      <p>Digital Hunt!</p>
-      <p>
-        <a href="https://finiteloop.co.in" className="underline">
-          Visit their website
-        </a>
-      </p>
+    <div className="content-container space-y-5 flex items-center justify-center">
       <main className="flex flex-col justify-center items-center space-y-10 text-justify">
-        <div className="flex justify-between items-center gap-4">
+        {/* Event Details */}
+        <div className="flex flex-col items-center space-y-5">
           <Image
-            src="https://images.squarespace-cdn.com/content/v1/5e10bdc20efb8f0d169f85f9/09943d85-b8c7-4d64-af31-1a27d1b76698/arrow.png?format=1500w"
-            alt="Vercel Logo"
-            width={500}
-            height={500}
+            src={event.banner || "/placeholder-banner.png"}
+            alt={event.eventName}
+            width={600}
+            height={400}
+            className="rounded-lg object-cover"
           />
-          <p>
-            What is Lorem Ipsum? Lorem Ipsum is simply dummy text of the
-            printing and typesetting industry. Lorem Ipsum has been the
-            industry's standard dummy text ever since the 1500s, when an unknown
-            printer took a galley of type and scrambled it to make a type
-            specimen book. It has survived not only five centuries, but also the
-            leap into electronic typesetting, remaining essentially unchanged.
-            It was popularised in the 1960s with the release of Letraset sheets
-            containing Lorem Ipsum passages, and more recently with desktop
-            publishing software like Aldus PageMaker including versions of Lorem
-            Ipsum. Why do we use it? It is a long established fact that a reader
-            will be distracted by the readable content of a page when looking at
-            its layout. The point of using Lorem Ipsum is that it has a
-            more-or-less normal distribution of letters, as opposed to using
-            'Content here, content here', making it look like readable English.
-            Many desktop publishing packages and web page editors now use Lorem
-            Ipsum as their default model text, and a search for 'lorem ipsum'
-            will uncover many web sites still in their infancy. Various versions
-            have evolved over the years, sometimes by accident, sometimes on
-            purpose (injected humour and the like).
-          </p>
+          <h1 className="text-3xl font-bold">{event.eventName}</h1>
+          <p className="italic text-gray-600">{event.description}</p>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full items-center justify-center">
+            <p>
+              <strong>Location:</strong> {event.location}
+            </p>
+            <p>
+              <strong>Date & Time:</strong>{" "}
+              {new Date(event.dateAndTime).toLocaleString()}
+            </p>
+            <p>
+              <strong>Entry Fee:</strong> ${event.entryFee}
+            </p>
+            <p>
+              <strong>Team Capacity:</strong> {event.teamCapacity}
+            </p>
+            <p>
+              <strong>Organizer Contact:</strong> {event.organizerContactNumber}
+            </p>
+          </div>
         </div>
-        <h3 className="text-3xl">Upcoming Events</h3>
+
+        {/* Button to Club Details */}
+        <h3 className=" font-semibold">Learn More About the Club</h3>
+        <Button size={"sm"}>
+          <Link href={`/clubs/${event.clubId}`}>Visit Club Page</Link>
+        </Button>
       </main>
     </div>
   );
