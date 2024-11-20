@@ -2,7 +2,6 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { Button } from "./ui/button";
 
 interface Event {
   eventId: number;
@@ -48,32 +47,33 @@ export default function HomeEvents() {
   }
 
   return (
-    <div className="flex flex-col space-y-6">
-      {events.slice(0, 5).map((event) => (
-        <Link href={`/events/${event.eventId}`} key={event.eventId}>
-          <div className="bg-white shadow-md rounded-lg overflow-hidden flex">
-            <Image
-              src={event.banner}
-              alt={event.eventName}
-              width={200}
-              height={200}
-              className="w-48 h-48 object-cover"
-            />
-            <div className="p-4 flex flex-col justify-between  modecard w-full">
-              <h3 className="text-xl font-bold">{event.eventName}</h3>
-              <p className="text-sm  line-clamp-3">{event.description}</p>
-              <p className="text-sm ">
-                {new Date(event.dateAndTime).toLocaleString()}
-              </p>
-              <p className="text-sm ">{event.location}</p>
+    <div className="content-container">
+      <h2 className="text-3xl font-bold mb-6">Upcoming Events</h2>
+      <div className="flex overflow-x-auto space-x-6">
+        {events.map((event) => (
+          <Link href={`/events/${event.eventId}`} key={event.eventId}>
+            <div className="bg-white shadow-md rounded-lg overflow-hidden min-w-[300px]">
+              <Image
+                src={event.banner}
+                alt={event.eventName}
+                width={300}
+                height={200}
+                className="w-full h-48 object-cover"
+              />
+              <div className="p-4">
+                <h3 className="text-xl font-bold">{event.eventName}</h3>
+                <p className="text-sm text-gray-600 line-clamp-3">
+                  {event.description}
+                </p>
+                <p className="text-sm text-gray-600">
+                  {new Date(event.dateAndTime).toLocaleString()}
+                </p>
+                <p className="text-sm text-gray-600">{event.location}</p>
+              </div>
             </div>
-          </div>
-        </Link>
-      ))}
-
-      <Link href="/events">
-        <Button className="mt-6">Explore all events</Button>
-      </Link>
+          </Link>
+        ))}
+      </div>
     </div>
   );
 }

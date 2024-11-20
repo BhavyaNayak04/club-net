@@ -103,7 +103,7 @@ export default function ClubDetails() {
         {loadingEvents ? (
           <p>Loading events...</p>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 content-container ">
+          <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 ">
             {events.map((event) => (
               <div
                 key={event.eventId}
@@ -115,7 +115,7 @@ export default function ClubDetails() {
                   height={200}
                   width={200}
                   alt={event.eventName}
-                  className="w-full h-48 object-cover"
+                  className="w-full h-48 object-cover aspect-video"
                 />
                 <p className="text-center">
                   <Button size={"sm"}>

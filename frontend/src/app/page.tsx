@@ -1,4 +1,7 @@
 import HomeEvents from "@/components/HomeEvents";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
+import Image from "next/image";
 
 export default function Home() {
   return (
@@ -18,43 +21,105 @@ export default function Home() {
       </section>
       <section className="grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-1 grid-cols-1 gap-5 items-center justify-center text-center">
         <div className="flex flex-col items-center justify-center space-y-6 modecard p-5 rounded-3xl h-72">
-          <div className="radial-gradient bg-gradient-to-r from-red-500 to-yellow-500 p-10 rounded-full"></div>
+          <div className="p-10 rounded-full overflow-hidden">
+            <Image
+              src="/path/to/image1.jpg"
+              alt="Event Image 1"
+              width={100}
+              height={100}
+              className="w-24 h-24 object-cover rounded-full"
+            />
+          </div>
           <p>Events are a great way to meet new people and make new friends.</p>
         </div>
         <div className="flex flex-col items-center justify-center space-y-6 modecard p-5 rounded-3xl h-72">
-          <div className="radial-gradient bg-gradient-to-r from-red-500 to-yellow-500 p-10 rounded-full"></div>
-          <p>There are 30+ clubs in Nitte that cater to all interests.</p>
+          <div className="p-10 rounded-full overflow-hidden">
+            <Image
+              src="/path/to/image2.jpg"
+              alt="Event Image 2"
+              width={100}
+              height={100}
+              className="w-24 h-24 object-cover rounded-full"
+            />
+          </div>
+          <p>Join a club that matches your interests and passions.</p>
         </div>
         <div className="flex flex-col items-center justify-center space-y-6 modecard p-5 rounded-3xl h-72">
-          <div className="radial-gradient bg-gradient-to-r from-red-500 to-yellow-500 p-10 rounded-full"></div>
-          <p>Explore clubs and events that interest you.</p>
+          <div className="p-10 rounded-full overflow-hidden">
+            <Image
+              src="/path/to/image3.jpg"
+              alt="Event Image 3"
+              width={100}
+              height={100}
+              className="w-24 h-24 object-cover rounded-full"
+            />
+          </div>
+          <p>Stay updated with the latest events and activities.</p>
         </div>
         <div className="flex flex-col items-center justify-center space-y-6 modecard p-5 rounded-3xl h-72">
-          <div className="radial-gradient bg-gradient-to-r from-red-500 to-yellow-500 p-10 rounded-full"></div>
-          <p>
-            Get notifications for events you are interested in and never miss
-            out.
-          </p>
+          <div className="p-10 rounded-full overflow-hidden">
+            <Image
+              src="/path/to/image4.jpg"
+              alt="Event Image 4"
+              width={100}
+              height={100}
+              className="w-24 h-24 object-cover rounded-full"
+            />
+          </div>
+          <p>Explore new opportunities and experiences.</p>
         </div>
       </section>
-      <section className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-5 items-center justify-center text-center text-lg">
-        <div className="flex flex-col items-center justify-center space-y-2  p-5 rounded-3xl h-72">
-          <div className="radial-gradient bg-gradient-to-r from-red-500 to-yellow-500 p-10 rounded-full"></div>
-          <p>Finite Loop Club</p>
-          <p>Elite Coding Club</p>
+      <section className="flex items-center justify-between space-x-5">
+        <div className="text-5xl font-bold text-center space-y-1">
+          <p>T</p>
+          <p>O</p>
+          <p>P</p>
+          <p>-</p>
+          <p>3</p>
         </div>
-        <div className="flex flex-col items-center justify-center space-y-2  p-5 rounded-3xl h-72">
-          <div className="radial-gradient bg-gradient-to-r from-red-500 to-yellow-500 p-10 rounded-full"></div>
-          <p>Computer Society of India</p>
-          <p>IT and Non IT</p>
-        </div>
-        <div className="flex flex-col items-center justify-center space-y-2  p-5 rounded-3xl h-72">
-          <div className="radial-gradient bg-gradient-to-r from-red-500 to-yellow-500 p-10 rounded-full"></div>
-          <p>Samvada</p>
-          <p>Let's talk!</p>
+        <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-5 items-center justify-center text-center  text-sm">
+          <div className="flex flex-col items-center justify-center space-y-2 p-5 rounded-3xl h-72">
+            <div className="p-10 rounded-full overflow-hidden">
+              <Image
+                src="https://www.finiteloop.co.in/_next/image?url=%2Fimages%2Fflc-logo-crop.png&w=1920&q=75"
+                alt="Finite Loop Club"
+                width={100}
+                height={100}
+                className="w-24 h-24 object-cover rounded-full"
+              />
+            </div>
+            <p>Finite Loop Club</p>
+            <p>Elite Coding Club</p>
+          </div>
+          <div className="flex flex-col items-center justify-center space-y-2 p-5 rounded-3xl h-72 text-sm">
+            <div className="p-10 rounded-full overflow-hidden">
+              <Image
+                src="https://preview.redd.it/i-got-bored-so-i-decided-to-draw-a-random-image-on-the-v0-4ig97vv85vjb1.png?width=640&crop=smart&auto=webp&s=22ed6cc79cba3013b84967f32726d087e539b699"
+                alt="Computer Society of India"
+                width={100}
+                height={100}
+                className="w-24 h-24 object-cover rounded-full"
+              />
+            </div>
+            <p>Computer Society of India</p>
+            <p>IT and Non IT</p>
+          </div>
+          <div className="flex flex-col items-center justify-center space-y-2 p-5 rounded-3xl h-72 text-sm">
+            <div className="p-10 rounded-full overflow-hidden">
+              <Image
+                src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/HackerEarth_logo.png/800px-HackerEarth_logo.png"
+                alt="Samvada"
+                width={100}
+                height={100}
+                className="w-24 h-24 object-cover rounded-full"
+              />
+            </div>
+            <p>Samvada</p>
+            <p>Let's talk!</p>
+          </div>
         </div>
       </section>
-      <h1 className="text-4xl font-bold text-center">Upcoming Events</h1>
+      <h2 className="text-3xl font-bold mb-6">Upcoming Events</h2>
       <HomeEvents />
     </main>
   );

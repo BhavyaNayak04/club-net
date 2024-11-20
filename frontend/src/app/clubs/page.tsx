@@ -92,14 +92,14 @@ export default function Club() {
               <Link
                 href={`/clubs/${club.clubId}?`}
                 key={club.clubId}
-                className="text-pretty text-sm flex items-center flex-col justify-center space-y-5"
+                className="text-pretty text-sm flex items-start flex-col justify-start space-y-5 p-5"
               >
                 <Image
                   src={club.logo}
                   alt={club.clubName}
                   width={200}
                   height={200}
-                  className="object-cover h-48 w-48"
+                  className="object-cover h-48 w-48 rounded-full"
                 />
                 <div className="space-y-2">
                   <h3 className="text-xl">{club.clubName}</h3>

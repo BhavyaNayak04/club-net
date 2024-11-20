@@ -11,7 +11,7 @@ export default function Navbar() {
       <Link href="/" className="text-xl">
         ClubNet
       </Link>
-      <div className="flex flex-row space-between space-x-7">
+      <div className="flex flex-row text-sm space-between space-x-7">
         <Link href={`/clubs`}>Clubs</Link>
         <Link href={`/events`}>Events</Link>
         <Link href={`/about`}>About</Link>

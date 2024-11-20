@@ -30,7 +30,7 @@ export default function RootLayout({
       <body className={`dark antialiased min-h-screen space-y-10`}>
         <Navbar />
         <div className="content-container">{children}</div>
-        <footer className="space-y-5 flex justify-between text-md items-center text-left px-28 py-10">
+        <footer className="space-y-5 flex justify-between text-xs items-center text-left px-28 py-10">
           <div>
             <h1 className="text-xl">ClubNet</h1>
             <p className="py-2 text-left">

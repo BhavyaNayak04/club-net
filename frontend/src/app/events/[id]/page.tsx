@@ -63,8 +63,8 @@ export default function Home() {
           <Image
             src={event.banner || "/placeholder-banner.png"}
             alt={event.eventName}
-            width={600}
-            height={400}
+            width={400}
+            height={200}
             className="rounded-lg object-cover"
           />
           <h1 className="text-3xl font-bold">{event.eventName}</h1>
