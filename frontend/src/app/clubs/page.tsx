@@ -87,7 +87,7 @@ export default function Club() {
         {loading ? (
           <p>Loading...</p>
         ) : (
-          <div className="mx-auto grid grid-cols-3 gap-10">
+          <div className="mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-10">
             {clubs.map((club) => (
               <Link
                 href={`/clubs/${club.clubId}?`}
@@ -97,12 +97,12 @@ export default function Club() {
                 <Image
                   src={club.logo}
                   alt={club.clubName}
-                  width={200}
-                  height={200}
-                  className="object-cover h-48 w-48 rounded-full"
+                  width={100}
+                  height={100}
+                  className="object-cover h-32 w-32 rounded-full"
                 />
-                <div className="space-y-2">
-                  <h3 className="text-xl">{club.clubName}</h3>
+                <div className="space-y-2 text-xs">
+                  <h3 className="font-bold text-sm">{club.clubName}</h3>
                   <p>{club.category}</p>
                   <p>{club.description}</p>
                   <p>{club.followers.length} followers</p>

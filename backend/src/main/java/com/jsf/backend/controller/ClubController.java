@@ -36,4 +36,9 @@ public class ClubController {
     public ResponseEntity<List<Club>> getAllClubsByUserId(@PathVariable Integer userId){
         return new ResponseEntity<>(clubService.allClubsByUserId(userId), HttpStatus.OK);
     }
+
+    @GetMapping("/top-clubs")
+    public ResponseEntity<List<Club>> getTopClubs(){
+        return new ResponseEntity<>(clubService.topClubs(), HttpStatus.OK);
+    }
 }
