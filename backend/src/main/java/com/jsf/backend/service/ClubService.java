@@ -37,4 +37,8 @@ public class ClubService {
         return clubRepository.findTopClubs(PageRequest.of(0, 3));
     }
 
+
+    public List<Club> getClubsByIds(List<Integer> clubIds) {
+        return clubRepository.findByIdIn(clubIds); // Assuming this method is implemented in ClubRepository
+    }
 }

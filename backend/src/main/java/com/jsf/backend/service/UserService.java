@@ -2,6 +2,7 @@ package com.jsf.backend.service;
 
 import com.jsf.backend.model.Club;
 import com.jsf.backend.model.User;
+import com.jsf.backend.repository.ClubRepository;
 import com.jsf.backend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,6 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -29,11 +31,16 @@ public class UserService {
 
             if (password.equals(student.getPassword())) {
                 // Generate a session ID (e.g., UUID) for the user
-                System.out.println(student.getPassword());
                 return UUID.randomUUID().toString();
             }
         }
         return null; // Authentication failed
     }
 
+
+    public List<Integer> getFollowedClubsByEmail(String email) {
+        Optional<User> user = userRepository.findByEmail(email);
+        return user.get().getClubsFollowed(); // Return the list of followed club IDs
+
+    }
 }
