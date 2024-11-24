@@ -2,7 +2,11 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { formSchema } from "@/components/constants";
 import { useState, useEffect } from "react";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 interface Club {
   shortcut: any;
   clubId: string;
@@ -41,36 +45,6 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import DashboardEle from "@/components/DashboardEle";
-
-const formSchema = z.object({
-  ename: z.string().min(2, {
-    message: "Event name must be at least 2 characters.",
-  }),
-  description: z.string().min(10, {
-    message: "Description must be at least 10 characters.",
-  }),
-  banner: z.string().url({
-    message: "Banner must be a valid URL.",
-  }),
-  club: z.string().min(1, {
-    message: "Club must be selected.",
-  }),
-  entryFee: z.number().min(0, {
-    message: "Entry fee must be a positive number.",
-  }),
-  teamMates: z.number().min(1, {
-    message: "Number of team mates must be at least 1.",
-  }),
-  location: z.string().min(2, {
-    message: "Location must be at least 2 characters.",
-  }),
-  contact: z.string().min(10, {
-    message: "Contact number must be at least 10 digits.",
-  }),
-  dateTime: z.string().min(1, {
-    message: "Date and time must be selected.",
-  }),
-});
 
 export default function DashboardPage() {
   const [open, setOpen] = useState(false);
@@ -139,6 +113,7 @@ export default function DashboardPage() {
       }
 
       console.log("Event added:", data);
+      toast.success("Event added successfully!");
     } catch (error) {
       console.error("Error adding event:", error);
     }
@@ -362,6 +337,7 @@ export default function DashboardPage() {
           </div>
         </form>
       </Form>
+      <ToastContainer />
     </section>
   );
 }

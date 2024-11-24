@@ -3,6 +3,12 @@ import { useEffect, useState } from "react";
 import useAuth from "@/hooks/useAuth";
 import Cookies from "js-cookie";
 import Image from "next/image";
+import Loading from "@/components/ui/loading";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 interface Club {
   clubId: number;
   clubName: string;
@@ -26,10 +32,16 @@ export default function Profile() {
             )}`
           );
           if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
+            toast.error("Error fetching followed clubs");
           }
-          const data: Club[] = await response.json();
-          setFollowedClubs(data);
+          const contentType = response.headers.get("content-type");
+          let data;
+          if (contentType && contentType.includes("application/json")) {
+            data = await response.json();
+            setFollowedClubs(data);
+          } else {
+            data = await response.text();
+          }
         } catch (error) {
           console.error("Error fetching followed clubs:", error);
         } finally {
@@ -42,14 +54,26 @@ export default function Profile() {
   }, [Cookies.get("email")]);
 
   if (loading || !isAuthenticated) {
-    return null; // Prevent further rendering while redirecting or loading
+    return null;
+  }
+
+  if (followedClubs.length === 0) {
+    return (
+      <main className="content-container space-y-10 flex flex-col items-center justify-center">
+        <h2 className="text-md">My Clubs</h2>
+        <p className="text-center">You are not following any clubs yet.</p>
+        <Link href="/clubs">
+          <Button>Explore Clubs</Button>
+        </Link>
+      </main>
+    );
   }
 
   return (
     <main className="content-container space-y-10">
       <h2 className="text-md font-bold mb-6">My Clubs</h2>
       {loadingClubs ? (
-        <p>Loading followed clubs...</p>
+        <Loading />
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {followedClubs.map((club) => (

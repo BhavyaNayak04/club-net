@@ -15,6 +15,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Loading from "@/components/ui/loading";
 import useAuth from "@/hooks/useAuth";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const loginSchema = z.object({
   email: z.string().email("Invalid email address"),
@@ -72,6 +74,8 @@ export default function LoginForm() {
         const data = await response.json();
         console.log("Login successful!");
 
+        toast.success("Logging you in...");
+        await new Promise((resolve) => setTimeout(resolve, 3000));
         login(data.sessionId, email);
 
         router.push("/");
@@ -100,65 +104,68 @@ export default function LoginForm() {
   }
 
   return (
-    <Card className="max-w-sm mx-auto">
-      <CardHeader>
-        <CardTitle className="text-2xl">Login to Club</CardTitle>
-        <CardDescription>
-          Enter your email below to login to your account
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        <form onSubmit={handleSubmit}>
-          <div className="grid gap-4">
-            <div className="grid gap-2">
-              <Label htmlFor="email">Email</Label>
-              <Input
-                id="email"
-                type="email"
-                placeholder="m@example.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
-              {errors.email && (
-                <p className="text-red-500 text-sm">{errors.email}</p>
-              )}
-            </div>
-            <div className="grid gap-2">
-              <div className="flex items-center">
-                <Label htmlFor="password">Password</Label>
-                <Link
-                  href="#"
-                  className="ml-auto inline-block text-sm underline"
-                >
-                  Forgot your password?
-                </Link>
+    <div>
+      <Card className="max-w-sm mx-auto">
+        <CardHeader>
+          <CardTitle className="text-2xl">Login to Club</CardTitle>
+          <CardDescription>
+            Enter your email below to login to your account
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <form onSubmit={handleSubmit}>
+            <div className="grid gap-4">
+              <div className="grid gap-2">
+                <Label htmlFor="email">Email</Label>
+                <Input
+                  id="email"
+                  type="email"
+                  placeholder="m@example.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+                {errors.email && (
+                  <p className="text-red-500 text-sm">{errors.email}</p>
+                )}
               </div>
-              <Input
-                id="password"
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
-              {errors.password && (
-                <p className="text-red-500 text-sm">{errors.password}</p>
-              )}
+              <div className="grid gap-2">
+                <div className="flex items-center">
+                  <Label htmlFor="password">Password</Label>
+                  <Link
+                    href="#"
+                    className="ml-auto inline-block text-sm underline"
+                  >
+                    Forgot your password?
+                  </Link>
+                </div>
+                <Input
+                  id="password"
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+                {errors.password && (
+                  <p className="text-red-500 text-sm">{errors.password}</p>
+                )}
+              </div>
+              <Button type="submit" className="w-full" disabled={loading}>
+                {loading ? (
+                  <span suppressHydrationWarning>Logging in...</span>
+                ) : (
+                  "Login"
+                )}
+              </Button>
             </div>
-            <Button type="submit" className="w-full" disabled={loading}>
-              {loading ? (
-                <span suppressHydrationWarning>Logging in...</span>
-              ) : (
-                "Login"
-              )}
-            </Button>
-          </div>
-          <div className="mt-4 text-center text-sm">
-            Don&apos;t have an account?{" "}
-            <Link href="/register" className="underline">
-              Sign up
-            </Link>
-          </div>
-        </form>
-      </CardContent>
-    </Card>
+            <div className="mt-4 text-center text-sm">
+              Don&apos;t have an account?{" "}
+              <Link href="/register" className="underline">
+                Sign up
+              </Link>
+            </div>
+          </form>
+        </CardContent>
+      </Card>
+      <ToastContainer />
+    </div>
   );
 }

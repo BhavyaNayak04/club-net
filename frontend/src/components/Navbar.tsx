@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import useAuth from "@/hooks/useAuth";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 export default function Navbar() {
   const [mode, setMode] = useState("🌞");
