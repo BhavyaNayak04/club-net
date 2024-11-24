@@ -40,7 +40,8 @@ public class UserService {
 
     public List<Integer> getFollowedClubsByEmail(String email) {
         Optional<User> user = userRepository.findByEmail(email);
-        return user.get().getClubsFollowed(); // Return the list of followed club IDs
+        // Return the list of followed club IDs
+        return user.map(User::getClubsFollowed).orElse(null);
 
     }
 }

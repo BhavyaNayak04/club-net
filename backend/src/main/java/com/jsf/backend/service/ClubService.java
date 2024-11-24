@@ -39,6 +39,6 @@ public class ClubService {
 
 
     public List<Club> getClubsByIds(List<Integer> clubIds) {
-        return clubRepository.findByIdIn(clubIds); // Assuming this method is implemented in ClubRepository
+        return clubRepository.findClubNameByClubIdIn(clubIds); // Assuming this method is implemented in ClubRepository
     }
 }

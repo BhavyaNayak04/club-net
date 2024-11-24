@@ -18,6 +18,6 @@ public interface ClubRepository extends MongoRepository<Club, ObjectId> {
     @Query(value = "{}", sort = "{ 'followers': -1 }")
     public List<Club>  findTopClubs(PageRequest pageRequest);
 
-    List<Club> findByIdIn(List<Integer> clubIds);
+   public List<Club> findClubNameByClubIdIn(List<Integer> clubIds);
 
 }

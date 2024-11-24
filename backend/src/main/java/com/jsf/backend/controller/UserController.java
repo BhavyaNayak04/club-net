@@ -49,19 +49,20 @@ public class UserController {
         }
     }
 
-    @GetMapping("/followed-clubs")
-    public ResponseEntity<?> getFollowedClubs(@RequestParam String email) {
+    @GetMapping("/followed-clubs/{email}")
+    public ResponseEntity<?> getFollowedClubs(@PathVariable String email) {
         try {
             // Get followed club IDs from the user based on their email
             List<Integer> followedClubIds = userService.getFollowedClubsByEmail(email);
+            System.out.println(followedClubIds);
 
             if (followedClubIds.isEmpty()) {
                 return ResponseEntity.status(HttpStatus.NO_CONTENT).body("No followed clubs found.");
             }
-            System.out.println(followedClubIds);
+
             // Get club details using the club IDs
             List<Club> clubs = clubService.getClubsByIds(followedClubIds);
-            System.out.println(clubs);
+           
             if (clubs.isEmpty()) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No club details found for the provided IDs.");
             }
@@ -70,7 +71,5 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred: " + e.getMessage());
         }
     }
-
-
 
 }
