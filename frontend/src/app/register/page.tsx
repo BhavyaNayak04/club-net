@@ -4,8 +4,6 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 
 import {
   Card,
@@ -38,7 +36,6 @@ export default function Register() {
   }>({});
   const [loading, setLoading] = useState(false);
   const router = useRouter();
-  const notify = () => toast("Registration successful!");
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
 
@@ -81,7 +78,7 @@ export default function Register() {
           data = { sessionId: await response.text() };
         }
         console.log("Registration successful!");
-        notify();
+
         login(data.sessionId, email);
 
         router.push("/");
@@ -119,7 +116,6 @@ export default function Register() {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <ToastContainer />{" "}
         <form onSubmit={handleSubmit} className="grid gap-4">
           <div className="grid gap-2">
             <Label htmlFor="email">Email</Label>
