@@ -25,5 +25,5 @@ public class User {
     private String usn;
     private String branch;
     private List<Integer> clubsFollowed;
-    private List<Integer> notifications;
+    private List<String> notifications;
 }

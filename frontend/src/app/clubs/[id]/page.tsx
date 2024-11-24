@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { useParams, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import Loading from "@/components/ui/loading";
 
 interface Club {
   clubName: string;
@@ -66,7 +67,7 @@ export default function ClubDetails() {
   }, [id]);
 
   if (loading) {
-    return <p>Loading...</p>;
+    return <Loading />;
   }
 
   if (!club) {

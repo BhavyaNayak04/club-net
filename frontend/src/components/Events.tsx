@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import Loading from "./ui/loading";
 
 interface Event {
   eventId: number;
@@ -48,7 +49,7 @@ export default function Events() {
       <h3>Hi! See all the events here!</h3>
       <main className="w-full flex flex-col justify-center items-center space-y-10">
         {loading ? (
-          <p>Loading...</p>
+          <Loading />
         ) : (
           <div className="mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
             {events.map((event) => (

@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Button } from "./ui/button";
+import Loading from "./ui/loading";
 
 interface Event {
   eventId: number;
@@ -44,7 +45,7 @@ export default function HomeEvents() {
   }, []);
 
   if (loading) {
-    return <p>Loading...</p>;
+    return <Loading />;
   }
 
   return (

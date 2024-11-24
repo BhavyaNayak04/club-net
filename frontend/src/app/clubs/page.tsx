@@ -12,6 +12,7 @@ import {
   CommandList,
   CommandShortcut,
 } from "@/components/ui/command";
+import Loading from "@/components/ui/loading";
 
 interface Club {
   shortcut: any;
@@ -85,7 +86,7 @@ export default function Club() {
       </Command>
       <main className="w-full flex flex-col justify-center items-center space-y-10">
         {loading ? (
-          <p>Loading...</p>
+          <Loading />
         ) : (
           <div className="mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-10">
             {clubs.map((club) => (
