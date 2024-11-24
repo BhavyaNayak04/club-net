@@ -1,110 +1,54 @@
 "use client";
 
-import { useRouter } from "next/navigation"; // For navigation
-import { Toaster, toast } from "sonner"; // Localized toast notification
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+import { useEffect, useState } from "react";
 
-// Form validation schema
-const formSchema = z.object({
-  semester: z.string().nonempty("Semester is required"),
-  usn: z.string().nonempty("USN is required"),
-  branch: z.string().nonempty("Branch is required"),
-});
+export default function ProfilePage() {
+  const [userEmail, setUserEmail] = useState(""); // To hold the logged-in user's email
+  const [followedClubs, setFollowedClubs] = useState<any[]>([]); // To hold followed club details
+  const [error, setError] = useState(""); // To handle any error during fetch
 
-export default function Profile() {
-  const router = useRouter(); // For redirection
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-  });
+  useEffect(() => {
+    const emailFromStorage = localStorage.getItem("userEmail");
+    if (emailFromStorage) {
+      setUserEmail(emailFromStorage);
 
-  // Handle form submission
-  async function onSubmit(values: z.infer<typeof formSchema>) {
-    try {
-      console.log(values);
-
-      // Show toast message for success
-      toast.success("Details updated successfully!");
-
-      // Simulate API or delay
-      setTimeout(() => {
-        // Redirect to profile page
-        router.push("/profile"); // Update this path to your actual profile page route
-      }, 2000); // Redirect after 2 seconds
-    } catch (error) {
-      console.error("Form submission error:", error);
-      toast.error("Failed to submit the form. Please try again.");
+      // Fetch followed club details using email
+      const response= fetch(`http://localhost:8080/api/auth/followed-clubs?email=${emailFromStorage}`)
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Failed to fetch followed clubs.");
+          }
+          return response.json();
+        })
+        .then((clubDetails) => {
+          setFollowedClubs(clubDetails); // Store club details
+        })
+        .catch((err) => setError(err.message));
+    } else {
+      setError("User email not found. Please log in again.");
     }
-  }
+  }, []);
 
   return (
-    <>
-      <Toaster /> {/* Display toast notifications only on this page */}
-      <Form {...form}>
-        <form
-          onSubmit={form.handleSubmit(onSubmit)}
-          className="space-y-8 max-w-3xl mx-auto py-10"
-        >
-          {/* Semester Field */}
-          <FormField
-            control={form.control}
-            name="semester"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Semester</FormLabel>
-                <FormControl>
-                  <Input placeholder="Enter semester" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+    <div className="max-w-4xl mx-auto py-10">
+      <h1 className="text-3xl font-bold mb-6">Hello, {userEmail || "User"}!</h1>
 
-          {/* USN Field */}
-          <FormField
-            control={form.control}
-            name="usn"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>USN</FormLabel>
-                <FormControl>
-                  <Input placeholder="Enter USN" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+      {error && <p className="text-red-500 mb-4">{error}</p>}
 
-          {/* Branch Field */}
-          <FormField
-            control={form.control}
-            name="branch"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Branch</FormLabel>
-                <FormControl>
-                  <Input placeholder="Enter branch" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          {/* Submit Button */}
-          <Button type="submit">Submit</Button>
-        </form>
-      </Form>
-    </>
+      <div>
+        <h2 className="text-2xl font-semibold mb-4">Followed Clubs</h2>
+        {followedClubs.length > 0 ? (
+          <ul className="list-disc pl-5">
+            {followedClubs.map((club, index) => (
+              <li key={index} className="mb-2">
+                {club.name} - {club.description}
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p className="text-gray-600">You are not following any clubs yet.</p>
+        )}
+      </div>
+    </div>
   );
 }
