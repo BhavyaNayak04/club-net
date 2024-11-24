@@ -27,4 +27,3 @@ public class User {
     private List<Integer> clubsFollowed;
     private List<Integer> notifications;
 }
-
