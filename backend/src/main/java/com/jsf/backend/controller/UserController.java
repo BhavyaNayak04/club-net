@@ -1,6 +1,8 @@
 package com.jsf.backend.controller;
 
 import com.jsf.backend.model.Club;
+import com.jsf.backend.model.User;
+import com.jsf.backend.repository.UserRepository;
 import com.jsf.backend.service.ClubService;
 import com.jsf.backend.service.UserService;
 import jakarta.servlet.http.Cookie;
@@ -22,11 +24,13 @@ public class UserController {
 
     private final UserService userService;
     private final ClubService clubService;
+    private final UserRepository userRepository;
 
     @Autowired
-    public UserController(UserService userService, ClubService clubService) {
+    public UserController(UserService userService, ClubService clubService, UserRepository userRepository) {
         this.userService = userService;
         this.clubService = clubService;
+        this.userRepository = userRepository;
     }
 
     @PostMapping("/login")
@@ -62,7 +66,7 @@ public class UserController {
 
             // Get club details using the club IDs
             List<Club> clubs = clubService.getClubsByIds(followedClubIds);
-           
+
             if (clubs.isEmpty()) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No club details found for the provided IDs.");
             }
@@ -71,5 +75,33 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred: " + e.getMessage());
         }
     }
+
+    @PostMapping("/register")
+    public ResponseEntity<?> register(@RequestBody Map<String, String> user) {
+        System.out.println("Received user details: " + user);
+        if(userRepository.findByEmail(user.get("email")).isPresent()){
+            return ResponseEntity.badRequest().body("User already exists");
+        }
+        String name = user.get("name");
+        String email = user.get("email");
+        String password = user.get("password");
+
+        if (name == null || email == null || password == null) {
+            return ResponseEntity.badRequest().body("All fields are required");
+        }
+
+        try {
+            User newuser = new User();
+            newuser.setUserId((int) (userRepository.count() + 1));
+            newuser.setName(name);
+            newuser.setEmail(email);
+            newuser.setPassword(password);
+            userService.register(newuser);
+            return ResponseEntity.ok("User registered successfully");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred: " + e.getMessage());
+        }
+    }
+
 
 }
