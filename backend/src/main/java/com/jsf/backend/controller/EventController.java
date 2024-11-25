@@ -46,4 +46,10 @@ public class EventController {
         return new ResponseEntity<>(eventService.eventsByClubId(clubId), HttpStatus.OK);
     }
 
+    @DeleteMapping("/{eventId}")
+    public ResponseEntity<Void> deleteEvent(@PathVariable Integer eventId) {
+        eventService.deleteEvent(eventId);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
 }

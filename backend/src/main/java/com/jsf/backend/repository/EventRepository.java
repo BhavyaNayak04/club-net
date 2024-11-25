@@ -15,4 +15,6 @@ public interface EventRepository extends MongoRepository<Event, ObjectId> {
     List<Event> getEventByClubId(int clubId);
 
     List<Event> getAllEventsByClubId(int clubId);
+
+    void deleteByEventId(Integer eventId);
 }

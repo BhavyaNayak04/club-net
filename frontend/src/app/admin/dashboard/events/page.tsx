@@ -2,8 +2,8 @@
 import { useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import { Button } from "@/components/ui/button";
-import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
+import Loading from "@/components/ui/loading";
 
 interface Event {
   eventId: number;
@@ -21,7 +21,6 @@ interface Event {
 export default function Events() {
   const [events, setEvents] = useState<Event[]>([]);
   const [loading, setLoading] = useState(true);
-  const router = useRouter();
   const email = Cookies.get("email");
 
   useEffect(() => {
@@ -67,12 +66,8 @@ export default function Events() {
     }
   };
 
-  const handleUpdate = (eventId: number) => {
-    router.push(`/admin/events/update/${eventId}`);
-  };
-
   if (loading) {
-    return <div>Loading...</div>;
+    return <Loading />;
   }
 
   return (
@@ -91,12 +86,11 @@ export default function Events() {
             <p>Organizer Contact: {event.organizerContactNumber}</p>
           </div>
           <div className="flex space-x-2">
-            <Button onClick={() => handleUpdate(event.eventId)}>Update</Button>
             <Button
               onClick={() => handleDelete(event.eventId)}
               variant="destructive"
             >
-              Delete
+              Delete Event
             </Button>
           </div>
         </div>

@@ -42,7 +42,4 @@ public class ClubService {
         return clubRepository.findClubNameByClubIdIn(clubIds);
     }
 
-//    public Club editClub(Integer clubId, Club club) {
-//        return clubRepository.updateClubByClubId(clubId, club);
-//    }
 }

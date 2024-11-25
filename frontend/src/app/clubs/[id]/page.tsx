@@ -84,10 +84,6 @@ export default function ClubDetails() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          email: userEmail,
-          clubId: id,
-        }),
       });
 
       if (!response.ok) {
@@ -95,10 +91,6 @@ export default function ClubDetails() {
       }
 
       toast.success("Club followed successfully!");
-      // Optionally, update the UI (e.g., increase follower count)
-      setClub((prevClub) =>
-        prevClub ? { ...prevClub, followers: [...prevClub.followers, id] } : null
-      );
     } catch (error) {
       console.error("Error following club:", error);
       toast.error("An error occurred. Please try again.");

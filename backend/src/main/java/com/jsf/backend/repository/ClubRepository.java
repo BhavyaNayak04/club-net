@@ -25,5 +25,4 @@ public interface ClubRepository extends MongoRepository<Club, ObjectId> {
 
 //    Club updateClubByClubId(Integer clubId, Club club);
 
-//    Club updateClubByClubId(Integer , Club );
 }

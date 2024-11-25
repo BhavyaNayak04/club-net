@@ -38,9 +38,4 @@ public class ClubController {
     public ResponseEntity<List<Club>> getTopClubs(){
         return new ResponseEntity<>(clubService.topClubs(), HttpStatus.OK);
     }
-
-//    @PutMapping("/edit/{clubId}")
-//    public ResponseEntity<Club> editClub(@PathVariable Integer clubId, @RequestBody Club club){
-//        return new ResponseEntity<>(clubService.editClub(clubId, club), HttpStatus.OK);
-//    }
 }

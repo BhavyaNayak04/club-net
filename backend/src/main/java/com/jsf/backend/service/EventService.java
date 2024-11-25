@@ -33,4 +33,8 @@ public class EventService {
     public List<Event> eventsByClubId(Integer clubId){
         return eventRepository.findEventsByClubId(clubId);
     }
+
+    public void deleteEvent(Integer eventId) {
+        eventRepository.deleteByEventId(eventId);
+    }
 }
