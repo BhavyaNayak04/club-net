@@ -96,5 +96,21 @@ public class UserController {
         }
     }
 
-//    @PutMapping("/follow")
+    @PutMapping("/follow/{email}")
+    public ResponseEntity<?> followClub(@PathVariable String email, @RequestBody Map<String, Object> body) {
+        System.out.println("Received body: " + body);
+
+        Integer clubId = (Integer) body.get("clubId");
+
+        if (clubId == null) {
+            return ResponseEntity.badRequest().body("Club ID is required");
+        }
+
+        try {
+            userService.addFollowedClub(email, clubId);
+            return ResponseEntity.ok("Club followed successfully");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred: " + e.getMessage());
+        }
+    }
 }

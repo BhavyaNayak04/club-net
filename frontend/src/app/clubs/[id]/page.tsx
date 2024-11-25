@@ -19,6 +19,7 @@ interface Club {
   logo: string;
   followers: number[];
 }
+
 interface Event {
   eventId: number;
   clubId: number;
@@ -38,6 +39,7 @@ export default function ClubDetails() {
   const [events, setEvents] = useState<Event[]>([]);
   const [loadingEvents, setLoadingEvents] = useState<boolean>(true);
   const [loading, setLoading] = useState<boolean>(true);
+  const [isFollowed, setIsFollowed] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchClubDetails = async () => {
@@ -57,6 +59,9 @@ export default function ClubDetails() {
         const data2: Event[] = await response2.json();
         setEvents(data2);
         setClub(data);
+        setIsFollowed(
+          data.followers.includes(parseInt(Cookies.get("userId") || "0"))
+        );
       } catch (error) {
         console.error("Error fetching club details:", error);
       } finally {
@@ -79,18 +84,25 @@ export default function ClubDetails() {
     }
 
     try {
-      const response = await fetch("http://localhost:8080/api/auth/follow", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      const response = await fetch(
+        `http://localhost:8080/api/auth/follow/${userEmail}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            clubId: parseInt(id as string, 10),
+          }),
+        }
+      );
 
       if (!response.ok) {
         throw new Error("Failed to follow club");
       }
 
       toast.success("Club followed successfully!");
+      setIsFollowed(true);
     } catch (error) {
       console.error("Error following club:", error);
       toast.error("An error occurred. Please try again.");
@@ -129,7 +141,9 @@ export default function ClubDetails() {
             </Link>
           </p>
         </div>
-        <Button onClick={handleFollow}>Follow</Button>
+        <Button onClick={handleFollow} disabled={isFollowed}>
+          {isFollowed ? "Followed" : "Follow"}
+        </Button>
 
         <h3 className="text-2xl">Events</h3>
         {loadingEvents ? (
