@@ -5,11 +5,7 @@ import com.jsf.backend.model.User;
 import com.jsf.backend.repository.UserRepository;
 import com.jsf.backend.service.ClubService;
 import com.jsf.backend.service.UserService;
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletResponse;
-import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -57,7 +53,6 @@ public class UserController {
     @GetMapping("/followed-clubs/{email}")
     public ResponseEntity<?> getFollowedClubs(@PathVariable String email) {
         try {
-            // Get followed club IDs from the user based on their email
             List<Integer> followedClubIds = userService.getFollowedClubsByEmail(email);
             System.out.println(followedClubIds);
 
@@ -65,13 +60,12 @@ public class UserController {
                 return ResponseEntity.status(HttpStatus.NO_CONTENT).body("No followed clubs found.");
             }
 
-            // Get club details using the club IDs
             List<Club> clubs = clubService.getClubsByIds(followedClubIds);
 
             if (clubs.isEmpty()) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No club details found for the provided IDs.");
             }
-            return ResponseEntity.ok(clubs); // Return list of followed clubs with details
+            return ResponseEntity.ok(clubs);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred: " + e.getMessage());
         }

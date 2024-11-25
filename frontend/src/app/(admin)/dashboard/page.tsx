@@ -1,11 +1,22 @@
 "use client";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import Link from "next/link";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { useState } from "react";
+import { formSchema } from "@/components/constants";
+import { useState, useEffect } from "react";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
+interface Club {
+  shortcut: any;
+  clubId: string;
+  clubName: string;
+  description: string;
+  category: string;
+  logo: string;
+  followers: { length: number };
+  url: string;
+}
 import {
   Form,
   FormControl,
@@ -33,63 +44,11 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-
-const frameworks = [
-  {
-    value: "club1",
-    label: "Photography Club",
-  },
-  {
-    value: "club2",
-    label: "Robotics Club",
-  },
-  {
-    value: "club3",
-    label: "Drama Club",
-  },
-  {
-    value: "club4",
-    label: "Music Club",
-  },
-  {
-    value: "club5",
-    label: "Literature Club",
-  },
-];
-
-const formSchema = z.object({
-  ename: z.string().min(2, {
-    message: "Event name must be at least 2 characters.",
-  }),
-  description: z.string().min(10, {
-    message: "Description must be at least 10 characters.",
-  }),
-  banner: z.string().url({
-    message: "Banner must be a valid URL.",
-  }),
-  club: z.string().min(1, {
-    message: "Club must be selected.",
-  }),
-  entryFee: z.number().min(0, {
-    message: "Entry fee must be a positive number.",
-  }),
-  teamMates: z.number().min(1, {
-    message: "Number of team mates must be at least 1.",
-  }),
-  location: z.string().min(2, {
-    message: "Location must be at least 2 characters.",
-  }),
-  contact: z.string().min(10, {
-    message: "Contact number must be at least 10 digits.",
-  }),
-  dateTime: z.string().min(1, {
-    message: "Date and time must be selected.",
-  }),
-});
+import DashboardEle from "@/components/DashboardEle";
 
 export default function DashboardPage() {
   const [open, setOpen] = useState(false);
-  const [value, setValue] = useState("");
+  const [clubs, setClubs] = useState<Club[]>();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -106,132 +65,64 @@ export default function DashboardPage() {
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    // Create a FormData object to handle file uploads
-    const formData = new FormData();
+  useEffect(() => {
+    const fetchClubs = async () => {
+      try {
+        const response = await fetch("http://localhost:8080/api/clubs");
+        const data = await response.json();
+        setClubs(data);
+      } catch (error) {
+        console.error("Error fetching clubs:", error);
+      }
+    };
 
-    // Append all form values
-    formData.append("ename", values.ename);
-    formData.append("description", values.description);
-    formData.append("banner", values.banner); // Assuming the file input is an array
-    formData.append("club", values.club);
-    formData.append("entryFee", values.entryFee.toString()); // Convert to string for FormData
-    formData.append("teamMates", values.teamMates.toString()); // Convert to string for FormData
-    formData.append("location", values.location);
-    formData.append("contact", values.contact);
-    formData.append("dateTime", values.dateTime);
+    fetchClubs();
+  }, []);
 
-    // Send the form data to the API
-    fetch('/api/events/add', {
-      method: 'POST',
-      body: formData, // Using FormData directly
-    })
-    .then((response) => response.json())
-    .then((data) => {
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    const eventData = {
+      eventName: values.ename,
+      description: values.description,
+      banner: values.banner,
+      dateAndTime: values.dateTime,
+      location: values.location,
+      entryFee: values.entryFee,
+      teamCapacity: values.teamMates,
+      organizerContactNumber: values.contact,
+    };
+
+    try {
+      const response = await fetch("http://localhost:8080/api/events/add", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(eventData),
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      const contentType = response.headers.get("content-type");
+      let data;
+      if (contentType && contentType.includes("application/json")) {
+        data = await response.json();
+      } else {
+        data = await response.text();
+      }
+
       console.log("Event added:", data);
-    })
-    .catch((error) => {
+      toast.success("Event added successfully!");
+    } catch (error) {
       console.error("Error adding event:", error);
-    });
-  }
+    }
+  };
 
   return (
     <section className="content-container space-y-10">
       <h1 className="text-3xl font-bold">Dashboard</h1>
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Events</CardTitle>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              className="h-4 w-4 text-muted-foreground"
-            >
-              <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
-            </svg>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">10</div>
-            <p className="text-xs text-muted-foreground">
-              Total events published
-            </p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Followers</CardTitle>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              className="h-4 w-4 text-muted-foreground"
-            >
-              <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
-              <circle cx="9" cy="7" r="4" />
-              <path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" />
-            </svg>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">100</div>
-            <p className="text-xs text-muted-foreground">ClubNet Followers</p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Rank</CardTitle>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              className="h-4 w-4 text-muted-foreground"
-            >
-              <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
-            </svg>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">3</div>
-            <p className="text-xs text-muted-foreground">ClubNet Rank</p>
-          </CardContent>
-        </Card>
-        <Link href={`dashboard/queries`}>
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Queries</CardTitle>
-
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                className="h-4 w-4 text-muted-foreground"
-              >
-                <rect width="20" height="14" x="2" y="5" rx="2" />
-                <path d="M2 10h20" />
-              </svg>
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">3</div>
-              <p className="text-xs text-muted-foreground">Pending Queries</p>
-            </CardContent>
-          </Card>
-        </Link>
-      </div>
+      <DashboardEle />
       <h1 className="text-3xl font-bold">Create Event</h1>
       <Form {...form}>
         <form
@@ -271,11 +162,17 @@ export default function DashboardPage() {
             name="banner"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Event Banner</FormLabel>
+                <FormLabel>Event Banner URL</FormLabel>
                 <FormControl>
-                  <Input type="file" {...field} />
+                  <Input
+                    type="url"
+                    placeholder="https://example.com/banner.jpg"
+                    {...field}
+                  />
                 </FormControl>
-                <FormDescription>Upload the event banner</FormDescription>
+                <FormDescription>
+                  Enter the URL of the event banner
+                </FormDescription>
                 <FormMessage />
               </FormItem>
             )}
@@ -285,7 +182,7 @@ export default function DashboardPage() {
             name="club"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Club{"   "}</FormLabel>
+                <FormLabel>Club</FormLabel>
                 <FormControl>
                   <Popover open={open} onOpenChange={setOpen}>
                     <PopoverTrigger asChild>
@@ -295,39 +192,37 @@ export default function DashboardPage() {
                         aria-expanded={open}
                         className="w-[200px] justify-between"
                       >
-                        {value
-                          ? frameworks.find(
-                              (framework) => framework.value === value
-                            )?.label
-                          : "Select framework..."}
+                        {field.value
+                          ? clubs?.find(
+                              (club) => club.clubId.toString() === field.value
+                            )?.clubName
+                          : "Select club..."}
                         <ChevronsUpDown className="opacity-50" />
                       </Button>
                     </PopoverTrigger>
                     <PopoverContent className="w-[200px] p-0">
                       <Command>
                         <CommandInput
-                          placeholder="Search framework..."
+                          placeholder="Search club..."
                           className="h-9"
                         />
                         <CommandList>
-                          <CommandEmpty>No framework found.</CommandEmpty>
+                          <CommandEmpty>No club found.</CommandEmpty>
                           <CommandGroup>
-                            {frameworks.map((framework) => (
+                            {clubs?.map((club) => (
                               <CommandItem
-                                key={framework.value}
-                                value={framework.value}
+                                key={club.clubId}
+                                value={club.clubId.toString()}
                                 onSelect={(currentValue) => {
-                                  setValue(
-                                    currentValue === value ? "" : currentValue
-                                  );
+                                  field.onChange(currentValue);
                                   setOpen(false);
                                 }}
                               >
-                                {framework.label}
+                                {club.clubName}
                                 <Check
                                   className={cn(
                                     "ml-auto",
-                                    value === framework.value
+                                    field.value === club.clubId.toString()
                                       ? "opacity-100"
                                       : "opacity-0"
                                   )}
@@ -442,6 +337,7 @@ export default function DashboardPage() {
           </div>
         </form>
       </Form>
+      <ToastContainer />
     </section>
   );
 }

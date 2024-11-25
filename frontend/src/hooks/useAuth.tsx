@@ -2,6 +2,8 @@
 import { useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const useAuth = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -28,14 +30,16 @@ const useAuth = () => {
     setIsAuthenticated(true);
   };
 
-  const logout = () => {
+  const logout = async () => {
     Cookies.remove("sessionId");
     Cookies.remove("email");
     setIsAuthenticated(false);
+    toast.success("Logging you out...");
+    await new Promise((resolve) => setTimeout(resolve, 3000));
     router.push("/login");
   };
 
-  return { isAuthenticated, loading, login, logout };
+  return { isAuthenticated, setIsAuthenticated, loading, login, logout };
 };
 
 export default useAuth;
