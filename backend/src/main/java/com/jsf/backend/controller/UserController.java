@@ -14,9 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping(value="/api/auth")
-
-
+@RequestMapping(value = "/api/auth")
 public class UserController {
 
     private final UserService userService;
@@ -65,7 +63,7 @@ public class UserController {
             if (clubs.isEmpty()) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No club details found for the provided IDs.");
             }
-            return ResponseEntity.ok(clubs);
+            return ResponseEntity.ok(clubs); // Return list of followed clubs with details
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred: " + e.getMessage());
         }
@@ -74,7 +72,7 @@ public class UserController {
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody Map<String, String> user) {
         System.out.println("Received user details: " + user);
-        if(userRepository.findByEmail(user.get("email")).isPresent()){
+        if (userRepository.findByEmail(user.get("email")).isPresent()) {
             return ResponseEntity.badRequest().body("User already exists");
         }
         String name = user.get("name");
@@ -86,17 +84,15 @@ public class UserController {
         }
 
         try {
-            User newuser = new User();
-            newuser.setUserId((int) (userRepository.count() + 1));
-            newuser.setName(name);
-            newuser.setEmail(email);
-            newuser.setPassword(password);
-            userService.register(newuser);
+            User newUser = new User();
+            newUser.setUserId((int) (userRepository.count() + 1));
+            newUser.setName(name);
+            newUser.setEmail(email);
+            newUser.setPassword(password);
+            userService.register(newUser);
             return ResponseEntity.ok("User registered successfully");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred: " + e.getMessage());
         }
     }
-
-
 }

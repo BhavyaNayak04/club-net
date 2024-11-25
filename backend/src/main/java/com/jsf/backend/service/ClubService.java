@@ -26,7 +26,7 @@ public class ClubService {
     {
         return clubRepository.findByClubId(clubId);
     }
-    
+
     public List<Club> allClubsByUserId(Integer userId)
     {
         return clubRepository.findByFollowersContaining(userId);
@@ -41,4 +41,8 @@ public class ClubService {
     public List<Club> getClubsByIds(List<Integer> clubIds) {
         return clubRepository.findClubNameByClubIdIn(clubIds);
     }
+
+//    public Club editClub(Integer clubId, Club club) {
+//        return clubRepository.updateClubByClubId(clubId, club);
+//    }
 }

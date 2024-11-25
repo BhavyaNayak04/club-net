@@ -16,5 +16,7 @@ public class Admin {
     private ObjectId id;
     private Integer adminId;
     private String name;
-    private String clubId;
+    private String email;
+    private String password;
+    private Integer clubId;
 }

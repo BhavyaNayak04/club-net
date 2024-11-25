@@ -1,6 +1,7 @@
 package com.jsf.backend.repository;
 
 import com.jsf.backend.model.Club;
+import com.jsf.backend.model.Event;
 import org.bson.types.ObjectId;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.mongodb.repository.MongoRepository;
@@ -20,4 +21,9 @@ public interface ClubRepository extends MongoRepository<Club, ObjectId> {
 
    public List<Club> findClubNameByClubIdIn(List<Integer> clubIds);
 
+    List<Event> getAllEventsByClubId(Integer clubId);
+
+//    Club updateClubByClubId(Integer clubId, Club club);
+
+//    Club updateClubByClubId(Integer , Club );
 }
