@@ -1,10 +1,14 @@
 "use client";
+
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import { useParams, useSearchParams } from "next/navigation";
+import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import Cookies from "js-cookie";
 import Loading from "@/components/ui/loading";
+import { toast } from "react-toastify"; // Import for toasters
+import "react-toastify/dist/ReactToastify.css"; // Toast styles
 
 interface Club {
   clubName: string;
@@ -27,9 +31,9 @@ interface Event {
   teamCapacity: number;
   organizerContactNumber: string;
 }
+
 export default function ClubDetails() {
   const { id } = useParams();
-
   const [club, setClub] = useState<Club | null>(null);
   const [events, setEvents] = useState<Event[]>([]);
   const [loadingEvents, setLoadingEvents] = useState<boolean>(true);
@@ -66,6 +70,41 @@ export default function ClubDetails() {
     }
   }, [id]);
 
+  const handleFollow = async () => {
+    const userEmail = Cookies.get("email");
+
+    if (!userEmail) {
+      toast.error("User not logged in. Please log in to follow clubs.");
+      return;
+    }
+
+    try {
+      const response = await fetch("http://localhost:8080/api/auth/follow", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: userEmail,
+          clubId: id,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to follow club");
+      }
+
+      toast.success("Club followed successfully!");
+      // Optionally, update the UI (e.g., increase follower count)
+      setClub((prevClub) =>
+        prevClub ? { ...prevClub, followers: [...prevClub.followers, id] } : null
+      );
+    } catch (error) {
+      console.error("Error following club:", error);
+      toast.error("An error occurred. Please try again.");
+    }
+  };
+
   if (loading) {
     return <Loading />;
   }
@@ -88,7 +127,7 @@ export default function ClubDetails() {
           <h1 className="text-3xl font-bold">{club.clubName}</h1>
           <div className="flex gap-2">
             <p className="italic">{club.category}</p>
-            {"|"}
+            {" | "}
             <h3 className="italic">{club.followers.length} followers</h3>
           </div>
           <p>{club.description}</p>
@@ -98,7 +137,7 @@ export default function ClubDetails() {
             </Link>
           </p>
         </div>
-        <Button>Follow</Button>
+        <Button onClick={handleFollow}>Follow</Button>
 
         <h3 className="text-2xl">Events</h3>
         {loadingEvents ? (

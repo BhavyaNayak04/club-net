@@ -7,6 +7,7 @@ import com.jsf.backend.service.ClubService;
 import com.jsf.backend.service.UserService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.http.HttpStatus;
@@ -102,6 +103,20 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred: " + e.getMessage());
         }
     }
+
+    @PostMapping("/follow")
+    public ResponseEntity<?> followClub(@RequestBody Map<String, Object> body) {
+        String email = (String) body.get("email");
+        Integer clubId = (Integer) body.get("clubId");
+        System.out.println(email);
+        if (email == null || clubId == null) {
+            return ResponseEntity.badRequest().body("Invalid data.");
+        }
+
+        userService.addFollowedClub(email, clubId); // Add this logic in your service
+        return ResponseEntity.ok("Club followed successfully!");
+    }
+
 
 
 }
