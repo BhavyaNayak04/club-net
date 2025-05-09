@@ -1,11 +1,11 @@
 # ClubNet
 
-ClubNet is a comprehensive web application for managing and exploring various clubs in NMAMIT, offering robust features for authentication, club listing, and event tracking.
+ClubNet is a web application for managing and exploring various clubs in NMAMIT, offering features for authentication, club listing, and event tracking.
 
 ## Features
 
 ### User Authentication
-- Secure authentication and session management using JWT
+- Secure authentication
 
 ### Club Management
 - Comprehensive club listings
@@ -17,7 +17,7 @@ ClubNet is a comprehensive web application for managing and exploring various cl
 ### Backend
 - **Framework**: Spring Boot
 - **Security**: Spring Security
-- **Authentication**: JWT (JSON Web Tokens)
+- **Authentication**: JWT
 - **Database**: MongoDB
 
 ### Frontend
