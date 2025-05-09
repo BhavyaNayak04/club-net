@@ -11,7 +11,6 @@ ClubNet is a comprehensive web application for managing and exploring various cl
 - Comprehensive club listings
 - Detailed club and event views
 - Club subscription functionality
-- Real-time event notifications
 
 ## Technology Stack
 
